@@ -48,6 +48,7 @@
 		"postinstall": "",
 		"dev": "cd apps/siiges-app && yarn dev"
 	},
+	
 	"dependencies": {
 		"@babel/cli": "^7.18.9",
 		"@emotion/react": "^11.9.3",

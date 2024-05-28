@@ -11,6 +11,7 @@
     "lint:fix": "eslint --fix .",
     "test": "jest"
   },
+  
   "dependencies": {
     "@siiges-ui/authentication": "^1.0.0",
     "@siiges-ui/inspecciones": "^1.0.0",
