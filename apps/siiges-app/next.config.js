@@ -12,5 +12,9 @@ const withTM = require('next-transpile-modules')([
 
 module.exports = withPlugins([withTM()], {
   webpack: (config) => config,
-  images: {},
+  experimental: {
+    images: {
+      unoptimized: true,
+    },
+  },
 });
