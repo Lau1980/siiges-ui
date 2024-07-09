@@ -185,7 +185,7 @@ export default function ModalTitulo({
             </Grid>
             <Grid item xs={6}>
               <Input
-                label="Número de cedula"
+                label="Número de cédula"
                 id="numeroCedula"
                 name="numeroCedula"
                 value={form.numeroCedula || ''}

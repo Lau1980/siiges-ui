@@ -7,7 +7,7 @@ const columnsInscritosExtra = (
   updateCalificaciones,
   isExtraordinarioEnabled,
 ) => [
-  { field: 'matricula', headerName: 'Matricula', width: 150 },
+  { field: 'matricula', headerName: 'Matrícula', width: 150 },
   {
     field: 'nombre',
     headerName: 'Nombre',

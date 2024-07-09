@@ -60,13 +60,13 @@ export default function ModalAlumnosInscritos({
           setNoti({
             open: true,
             message:
-              'Algo salio mal al inscribir el alumno, reintente mas tarde',
+              'Algo salió mal al inscribir el alumno, reintente más tarde',
             type: 'error',
           });
         } else {
           setNoti({
             open: true,
-            message: 'Exito al inscribir el alumno!',
+            message: '!Exito al inscribir el alumno!',
             type: 'success',
           });
           setOpen(false);
@@ -76,7 +76,7 @@ export default function ModalAlumnosInscritos({
       setNoti({
         open: true,
         message:
-          'Algo salio mal, el alumno debe estar inscrito a almenos una materia',
+          'Algo salió mal, el alumno debe estar inscrito en almenos una materia',
         type: 'error',
       });
     }

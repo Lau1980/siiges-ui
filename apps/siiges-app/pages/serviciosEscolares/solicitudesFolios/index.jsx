@@ -79,8 +79,8 @@ export default function solicitudesFolios() {
         <DataTable
           buttonAdd
           buttonClick={handleCreate}
-          buttonText="Agregar Titulo"
-          title="Solicitudes de Titulos"
+          buttonText="Agregar Título"
+          title="Solicitudes de Títulos"
           rows={solicitudes}
           columns={columns(handleEdit)}
         />

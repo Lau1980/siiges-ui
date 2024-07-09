@@ -4,7 +4,7 @@ import React from 'react';
 
 export default function CrearTitulo() {
   return (
-    <Layout title="Agregar Titulo">
+    <Layout title="Agregar Título">
       <FoliosData solicitudType="titulo" />
     </Layout>
   );

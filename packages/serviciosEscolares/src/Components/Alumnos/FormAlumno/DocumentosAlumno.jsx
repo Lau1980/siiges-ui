@@ -37,7 +37,7 @@ export default function DocumentosAlumno({ id, type }) {
   return (
     <div style={{ padding: '20px' }}>
       <Typography variant="body1">
-        ¡Nota importante! Los documentos que se adjunten tendran que ser
+        ¡Nota importante! Los documentos que se adjunten tendrán que ser
         escaneados a color, con buena resolución y cuidando de que no se pierda
         u omita información.
       </Typography>
@@ -48,7 +48,7 @@ export default function DocumentosAlumno({ id, type }) {
             tipoEntidad="ALUMNO"
             tipoDocumento="ARCHIVO_CERTIFICADO"
             id={id}
-            label="Archivo Cédula Profesional, Titulo o equivalente (PDF)"
+            label="Archivo Cédula Profesional, Título o equivalente (PDF)"
             url={fileURLs[0]}
             setUrl={(url) => handleFileLoaded(0, url)}
           />

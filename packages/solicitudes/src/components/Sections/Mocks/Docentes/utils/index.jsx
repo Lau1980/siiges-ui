@@ -4,7 +4,7 @@ const tiposDocentes = [
 ];
 
 const documentosPresentados = [
-  { id: 1, nombre: 'Titulo' },
+  { id: 1, nombre: 'Título' },
   { id: 2, nombre: 'Cédula' },
 ];
 
@@ -18,7 +18,7 @@ const nivel = [
   { id: 1, nombre: 'Licenciatura' },
   { id: 2, nombre: 'Técnico Superior Universitario' },
   { id: 3, nombre: 'Especialidad' },
-  { id: 4, nombre: 'Maestria' },
+  { id: 4, nombre: 'Maestría' },
   { id: 5, nombre: 'Doctorado' },
   { id: 6, nombre: 'Profesional Asociado' },
 ];

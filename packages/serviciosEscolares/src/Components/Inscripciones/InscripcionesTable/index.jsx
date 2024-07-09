@@ -36,7 +36,7 @@ export default function InscripcionesTable({
         console.error('Error fetching alumno:', error);
         setNoti({
           open: true,
-          message: 'Algo salio mal al cargar al alumno, revisa la matricula',
+          message: 'Algo salió mal al cargar al alumno, revisa la matrícula',
           type: 'error',
         });
         return;
@@ -60,13 +60,13 @@ export default function InscripcionesTable({
           setNoti({
             open: true,
             message:
-              'Algo salio mal al inscribir el alumno, reintente mas tarde',
+              'Algo salió mal al inscribir el alumno, reintente más tarde',
             type: 'error',
           });
         } else {
           setNoti({
             open: true,
-            message: 'Exito al inscribir el alumno!',
+            message: '!Exito al inscribir el alumno!',
             type: 'success',
           });
           setAlumnosInscritos((prev) => [...prev, alumnoByMatricula]);
@@ -81,7 +81,7 @@ export default function InscripcionesTable({
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Input
-          label="Matricula"
+          label="Matrícula"
           name="matricula"
           value={matriculaValue}
           onchange={(e) => setMatriculaValue(e.target.value)}

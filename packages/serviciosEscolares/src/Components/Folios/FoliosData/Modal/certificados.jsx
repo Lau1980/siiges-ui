@@ -45,7 +45,7 @@ export default function ModalCertificado({
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Input
-            label="Matricula"
+            label="Matrícula"
             id="matricula"
             name="matricula"
             value={form.matricula || ''}
@@ -57,7 +57,7 @@ export default function ModalCertificado({
         </Grid>
         <Grid item xs={6}>
           <InputDate
-            label="Fecha de elaboracion de certificado"
+            label="Fecha de elaboración de certificado"
             id="fechaInicio"
             name="fechaInicio"
             type="datetime"
