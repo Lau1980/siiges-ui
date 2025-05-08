@@ -63,7 +63,7 @@ export default function RevalidacionEquivalencias() {
       } else {
         setNoti({
           open: true,
-          message: 'No se encontraron datos',
+          message: '¡No se encontraron datos!',
           type: 'warning',
         });
         setRows([]);
