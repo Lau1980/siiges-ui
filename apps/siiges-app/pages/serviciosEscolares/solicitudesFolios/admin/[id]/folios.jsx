@@ -105,11 +105,12 @@ export default function Folios() {
           const alumnosResponse = await getData({
             endpoint: `/solicitudesFolios/${id}/alumnos`,
           });
-
           if (alumnosResponse.data) {
             const mappedAlumnos = alumnosResponse.data.map((res) => ({
               id: res.id,
+              consecutivo: res.consecutivo,
               nombre: `${res.alumno.persona.nombre} ${res.alumno.persona.apellidoPaterno} ${res.alumno.persona.apellidoMaterno}`,
+              numeroFolioActa: res.folioActa || '',
               matricula: res.alumno.matricula,
               folio: res.folioDocumentoAlumno?.folioDocumento,
               foja: res.folioDocumentoAlumno?.foja?.nombre,
@@ -273,7 +274,13 @@ export default function Folios() {
     {
       field: 'id', headerName: 'ID', width: 100, hide: true,
     },
+    {
+      field: 'consecutivo',
+      headerName: 'Consecutivo',
+      width: 150,
+    },
     { field: 'nombre', headerName: 'Nombre', width: 320 },
+    { field: 'numeroFolioActa', headerName: 'Folio Acta', width: 150 },
     { field: 'matricula', headerName: 'Matrícula', width: 150 },
     { field: 'folio', headerName: 'Folio', width: 200 },
     { field: 'envio', headerName: 'Estatus de envio', width: 200 },
@@ -407,6 +414,8 @@ export default function Folios() {
                       <ListTitle text="Periodo" />
                       <ListTitle text="Tipo de Documento" />
                       <ListTitle text="Tipo de Solicitud" />
+                      <ListTitle text="Alumnos" />
+
                     </List>
                   </Grid>
                   <Divider orientation="vertical" flexItem sx={{ mx: 3 }} />
@@ -416,6 +425,9 @@ export default function Folios() {
                       <ListSubtitle text={PERIODOS[etiquetas.periodos] || 'N/A'} />
                       <ListSubtitle text={etiquetas.tipoDocumento || 'N/A'} />
                       <ListSubtitle text={etiquetas.tipoSolicitudFolio || 'N/A'} />
+                      <ListSubtitle
+                        text={Array.isArray(alumnosRows) ? alumnosRows.length : 0}
+                      />
                     </List>
                   </Grid>
                 </Grid>
