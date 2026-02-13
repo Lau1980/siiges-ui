@@ -1,4 +1,6 @@
-import { ButtonSimple, DefaultModal, Layout } from '@siiges-ui/shared';
+import {
+  ButtonSimple, Context, DefaultModal, Layout,
+} from '@siiges-ui/shared';
 import {
   Asignaturas,
   CiclosEscolares,
@@ -8,12 +10,13 @@ import {
 } from '@siiges-ui/serviciosescolares';
 import { useRouter } from 'next/router';
 import { useProgramaById } from '@siiges-ui/solicitudes';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Box, Grid, Tab, Tabs, Typography,
 } from '@mui/material';
 
 export default function EditPrograma() {
+  const { session } = useContext(Context);
   const router = useRouter();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(true);
@@ -52,10 +55,32 @@ export default function EditPrograma() {
     setRules(updatedRules);
   };
 
-  const tabsConfig = [
-    { label: 'Programa', component: <ProgramasData programa={programa} id={query.id} /> },
-    { label: 'Ciclos Escolares', component: <CiclosEscolares /> },
-    { label: 'Grupos', component: <Grupos /> },
+  const isSicytEditar = (rol) => rol === 'sicyt_editar';
+
+  const baseTabs = [
+    {
+      label: 'Programa',
+      component: <ProgramasData programa={programa} id={query.id} />,
+    },
+    {
+      label: 'Asignaturas',
+      component: <Asignaturas />,
+    },
+  ];
+
+  const fullTabs = [
+    {
+      label: 'Programa',
+      component: <ProgramasData programa={programa} id={query.id} />,
+    },
+    {
+      label: 'Ciclos Escolares',
+      component: <CiclosEscolares />,
+    },
+    {
+      label: 'Grupos',
+      component: <Grupos />,
+    },
     {
       label: 'Reglas',
       component: (
@@ -67,8 +92,13 @@ export default function EditPrograma() {
         />
       ),
     },
-    { label: 'Asignaturas', component: <Asignaturas /> },
+    {
+      label: 'Asignaturas',
+      component: <Asignaturas />,
+    },
   ];
+
+  const tabsConfig = isSicytEditar(session?.rol) ? baseTabs : fullTabs;
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
