@@ -18,13 +18,13 @@ const columns = (handleEdit) => [
   },
   { field: 'name', headerName: 'Nombre', width: 250 },
   {
-    field: 'fechaTermino',
+    field: 'fechaTerminacion',
     headerName: 'Fecha de terminación de plan de estudios',
     width: 350,
   },
   {
-    field: 'fechaElaboracion',
-    headerName: 'Fecha de elaboración de certificado',
+    field: 'fechaExpedicion',
+    headerName: 'Fecha de expedición de título',
     width: 350,
   },
   {
@@ -59,8 +59,8 @@ export default function AlumnosCertificado() {
             const mappedRows = response.data.map((alumnos) => ({
               id: alumnos.id,
               name: `${alumnos.alumno.persona.nombre} ${alumnos.alumno.persona.apellidoPaterno} ${alumnos.alumno.persona.apellidoMaterno}`,
-              fechaTermino: dayjs(alumnos.fechaTermino).format('DD/MM/YYYY'),
-              fechaElaboracion: dayjs(alumnos.fechaElaboracion).format('DD/MM/YYYY'),
+              fechaTerminacion: dayjs(alumnos.fechaTerminacion).format('DD/MM/YYYY'),
+              fechaExpedicion: dayjs(alumnos.fechaExpedicion).format('DD/MM/YYYY'),
             }));
             setRows(mappedRows);
           }

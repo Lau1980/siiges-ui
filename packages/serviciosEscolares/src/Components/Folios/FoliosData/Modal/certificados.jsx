@@ -14,21 +14,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 
-function getFechaElaboracionAuto(FechaElaboracion) {
-  const fecha = new Date(FechaElaboracion);
-
-  const dia = fecha.getDay();
-  if (dia === 6) {
-    fecha.setDate(fecha.getDate() - 1);
-  }
-
-  if (dia === 0) {
-    fecha.setDate(fecha.getDate() - 2);
-  }
-
-  return dayjs(fecha).format('YYYY-MM-DD');
-}
-
 export default function ModalCertificado({
   open,
   setOpen,
@@ -38,7 +23,6 @@ export default function ModalCertificado({
   setAlumnoResponse,
   rowData,
   disabled,
-  fechaElaboracion,
   alumnosAgregados,
 }) {
   const [form, setForm] = useState({});
@@ -47,16 +31,9 @@ export default function ModalCertificado({
   const [disabledButton, setDisabledButton] = useState(true);
   const { setNoti, setLoading } = useContext(Context);
   const [modalTitulo, setModalTitulo] = useState('Agregar Alumno');
-  useEffect(() => {
-    if (open && type === 'create') {
-      setForm({
-        fechaElaboracion: getFechaElaboracionAuto(fechaElaboracion),
-      });
-    }
-  }, [open, type]);
 
   const validateForm = () => {
-    const isValid = alumno && form.fechaElaboracion && form.fechaTerminacion;
+    const isValid = alumno && form.fechaTerminacion;
     setDisabledButton(!isValid || disabled);
   };
 
@@ -72,9 +49,6 @@ export default function ModalCertificado({
       }
       setAlumnoId(rowData.alumnoId);
     } else {
-      setForm({
-        fechaElaboracion: getFechaElaboracionAuto(fechaElaboracion),
-      });
       setAlumno(null);
       setAlumnoId(null);
     }
@@ -147,7 +121,6 @@ export default function ModalCertificado({
     const formattedForm = {
       matricula: form.matricula,
       fechaTerminacion: dayjs(form.fechaTerminacion).format('YYYY-MM-DDTHH:mm:ssZ'),
-      fechaElaboracion: dayjs(form.fechaElaboracion).format('YYYY-MM-DDTHH:mm:ssZ'),
     };
 
     const endpoint = type === 'edit'
@@ -220,10 +193,10 @@ export default function ModalCertificado({
         <Grid item xs={6}>
           <InputDate
             label="Fecha de elaboración de certificado"
-            id="fechaElaboracion"
-            name="fechaElaboracion"
+            id="fechaExpedicion"
+            name="fechaExpedicion"
             type="datetime"
-            value={getFechaElaboracionAuto(fechaElaboracion) || ''}
+            value={form.fechaExpedicion || ''}
             onChange={handleChange}
             required
             disabled
@@ -269,7 +242,6 @@ ModalCertificado.propTypes = {
   type: PropTypes.string.isRequired,
   id: PropTypes.number,
   programaId: PropTypes.number,
-  fechaElaboracion: PropTypes.string.isRequired,
   alumnosAgregados: PropTypes.arrayOf(
     PropTypes.shape({
       alumnoId: PropTypes.number.isRequired,
@@ -288,11 +260,8 @@ ModalCertificado.propTypes = {
     alumnoId: PropTypes.number,
     id: PropTypes.number,
     name: PropTypes.string,
-    fechaTermino: PropTypes.string,
-    fechaElaboracion: PropTypes.string,
     fechaInicio: PropTypes.string,
     fechaTerminacion: PropTypes.string,
-    fechaExpedicion: PropTypes.string,
     fechaExamenProfesional: PropTypes.string,
     fechaExencionExamenProfesional: PropTypes.string,
   }),

@@ -22,7 +22,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
     marginLeft: theme.spacing(1.25),
   },
   '& .MuiSvgIcon-root': {
-    color: theme.palette.grey[800],
+    color: theme.palette.action.active,
     marginRight: theme.spacing(1),
   },
 }));

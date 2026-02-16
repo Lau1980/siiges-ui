@@ -14,6 +14,7 @@ import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 import SchoolIcon from '@mui/icons-material/School';
 // import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
+import LinkIcon from '@mui/icons-material/Link';
 
 const canViewAsignacionFolios = (rol, nombre) => {
   if (rol === 'admin' || rol === 'ce_sicyt') return true;
@@ -139,7 +140,7 @@ const panelMenuOptions = (rol, nombre) => [
     ? [{
       userId: 2,
       text: 'Asignación de Folios',
-      icon: <AssignmentLateIcon />,
+      icon: <LinkIcon />,
       type: 'dropdown',
       options: [
         {

@@ -10,6 +10,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Link from 'next/link';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import userRol from './utils/userRol';
 import DropdownButton from '../Select/DropdownButton';
 
@@ -80,12 +81,29 @@ function MenuDrawer({
             {users?.map((item) => (
               <ListItem key={item.key} disablePadding sx={{ display: 'block' }}>
                 {item.type === 'dropdown' ? (
-                  <DropdownButton
-                    icon={item.icon}
-                    text={item.text}
-                    options={item.options}
-                  />
+                  <Box sx={{ position: 'relative' }}>
+                    <DropdownButton
+                      icon={React.cloneElement(item.icon, {
+                        sx: { color: 'action.active' },
+                      })}
+                      text={item.text}
+                      options={item.options}
+                    />
+                    {open && (
+                    <ArrowDropDownIcon
+                      fontSize="small"
+                      sx={{
+                        position: 'absolute',
+                        right: 16,
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        pointerEvents: 'none',
+                      }}
+                    />
+                    )}
+                  </Box>
                 ) : (
+
                   <Link href={item.route}>
                     <ListItemButton
                       sx={{

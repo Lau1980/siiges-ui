@@ -15,6 +15,8 @@ import {
   GetFile,
   createRecord,
   deleteRecord,
+  DefaultModal,
+  ButtonsForm,
 } from '@siiges-ui/shared';
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
@@ -45,20 +47,25 @@ export default function Folios() {
   const [estatus, setEstatus] = useState();
   const [alumnosRows, setAlumnosRows] = useState([]);
   const [alumnoData, setAlumnoData] = useState({});
+  const [alumnoResponse, setAlumnoResponse] = useState(true);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [alumnoToDelete, setAlumnoToDelete] = useState(null);
   const [rowData, setRowData] = useState({});
   const [disabled, setDisabled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [solicitudFolioCreatedAt, setSolicitudFolioCreatedAt] = useState(null);
   const [tipoDocumento, setTipoDocumento] = useState();
   const [formData, setFormData] = useState({
     folioPago: '',
   });
+  const selectedAlumno = alumnosRows.find(
+    (row) => row.id === alumnoToDelete,
+  );
 
   const router = useRouter();
   const { id } = router.query;
 
   useEffect(() => {
-    if (id) {
+    if (id && alumnoResponse) {
       const fetchData = async () => {
         setLoading(true);
         try {
@@ -66,7 +73,6 @@ export default function Folios() {
             endpoint: `/solicitudesFolios/${id}`,
           });
           const { data } = response;
-          setSolicitudFolioCreatedAt(data.createdAt);
           setObservaciones(data.observaciones || '');
           setEtiquetas({
             tipoDocumento: data.tipoDocumento?.nombre || '',
@@ -109,14 +115,12 @@ export default function Folios() {
               foja: res.folioDocumentoAlumno?.foja?.nombre,
               libro: res.folioDocumentoAlumno?.libro?.nombre,
               envio: res.folioDocumentoAlumno?.envioExitoso ? 'Enviado' : 'Pendiente',
-              fechaElaboracion: dayjs(res.fechaElaboracion).format(
-                'DD/MM/YYYY',
-              ),
-              fechaTermino: dayjs(res.fechaTermino).format('DD/MM/YYYY'),
+              fechaExpedicion: dayjs(res.fechaExpedicion).format('DD/MM/YYYY'),
+              fechaTerminacion: dayjs(res.fechaTerminacion).format('DD/MM/YYYY'),
             }));
-
             setAlumnosRows(mappedAlumnos);
             setAlumnoData(alumnosResponse.data);
+            setAlumnoResponse(false);
           }
         } catch (error) {
           setNoti({
@@ -132,7 +136,7 @@ export default function Folios() {
       };
       fetchData();
     }
-  }, [id]);
+  }, [id, alumnoResponse]);
 
   const handleTabChange = (event, newValue) => {
     setTabIndex(newValue);
@@ -231,21 +235,27 @@ export default function Folios() {
       });
     }
   };
-  const handleDeleteAlumno = async (alumnoId) => {
+  const handleDeleteAlumno = (alumnoId) => {
+    setAlumnoToDelete(alumnoId);
+    setOpenDeleteModal(true);
+  };
+  const confirmDeleteAlumno = async () => {
+    if (!alumnoToDelete) return;
+
     setLoading(true);
     try {
       const response = await deleteRecord({
-        endpoint: `/solicitudesFolios/solicitudesFoliosAlumnos/${alumnoId}`,
+        endpoint: `/solicitudesFolios/solicitudesFoliosAlumnos/${alumnoToDelete}`,
       });
 
       if (response.statusCode === 200) {
         setNoti({
           open: true,
-          message: 'Alumno eliminado correctamente',
+          message: `Alumno ${selectedAlumno?.nombre} eliminado correctamente`,
           type: 'success',
         });
 
-        setAlumnosRows((prev) => prev.filter((row) => row.id !== alumnoId));
+        setAlumnoResponse(true);
       }
     } catch (error) {
       setNoti({
@@ -255,9 +265,10 @@ export default function Folios() {
       });
     } finally {
       setLoading(false);
+      setOpenDeleteModal(false);
+      setAlumnoToDelete(null);
     }
   };
-
   const alumnosColumns = [
     {
       field: 'id', headerName: 'ID', width: 100, hide: true,
@@ -269,11 +280,11 @@ export default function Folios() {
     { field: 'foja', headerName: 'Foja', width: 200 },
     { field: 'libro', headerName: 'Libro', width: 200 },
     {
-      field: 'fechaElaboracion',
-      headerName: 'Fecha de Elaboración',
+      field: 'fechaExpedicion',
+      headerName: 'Fecha de Expedición de certificado',
       width: 300,
     },
-    { field: 'fechaTermino', headerName: 'Fecha de Término', width: 300 },
+    { field: 'fechaTerminacion', headerName: 'Fecha de Término', width: 300 },
     {
       field: 'actions',
       headerName: 'Acciones',
@@ -287,13 +298,13 @@ export default function Folios() {
           </Tooltip>
 
           {estatus === 2 && (
-          <Tooltip title="Eliminar alumno" placement="top">
-            <IconButton
-              onClick={() => handleDeleteAlumno(params.row.id)}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
+            <Tooltip title="Eliminar alumno" placement="top">
+              <IconButton
+                onClick={() => handleDeleteAlumno(params.row.id)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
           )}
         </>
       ),
@@ -441,6 +452,9 @@ export default function Folios() {
                 title="Alumnos"
                 rows={alumnosRows}
                 columns={alumnosColumns}
+                initialState={{
+                  sorting: { sortModel: [{ field: 'consecutivo', sort: 'asc' }] },
+                }}
               />
             </Grid>
             {tipoDocumento === 1 ? (
@@ -450,8 +464,7 @@ export default function Folios() {
                 type="consult"
                 id={id}
                 rowData={rowData}
-                setAlumnoResponse={() => { }}
-                fechaExpedicion={solicitudFolioCreatedAt}
+                setAlumnoResponse={setAlumnoResponse}
                 disabled={disabled}
               />
             ) : (
@@ -462,8 +475,7 @@ export default function Folios() {
                 id={id}
                 rowData={rowData}
                 title="Agregar Alumno"
-                setAlumnoResponse={() => { }}
-                fechaElaboracion={solicitudFolioCreatedAt}
+                setAlumnoResponse={setAlumnoResponse}
                 disabled={disabled}
               />
             )}
@@ -490,6 +502,29 @@ export default function Folios() {
             folios={handleFoliosSubmit}
             estatus={estatus}
           />
+          <DefaultModal
+            title="Eliminar alumno"
+            open={openDeleteModal}
+            setOpen={setOpenDeleteModal}
+          >
+            <Typography>
+              Está a punto de eliminar al alumno con matrícula:
+              {' '}
+              <strong>{selectedAlumno?.matricula}</strong>
+              {' '}
+              de esta solicitud.
+              <br />
+              Esta acción no se puede deshacer.
+              <br />
+              ¿Desea continuar?
+            </Typography>
+
+            <ButtonsForm
+              cancel={() => setOpenDeleteModal(false)}
+              confirm={confirmDeleteAlumno}
+              confirmText="Confirmar"
+            />
+          </DefaultModal>
         </Grid>
       </Grid>
     </Layout>

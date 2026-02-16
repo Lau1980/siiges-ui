@@ -47,18 +47,6 @@ const fundamentoLegal = [
   { id: 5, nombre: 'NO APLICA' },
 ];
 
-function getFechaExpedicionAuto(fechaExpedicion) {
-  const fallback = dayjs().tz('America/Mexico_City').startOf('day');
-  if (!fechaExpedicion) return fallback.toISOString();
-  let fecha = dayjs.tz(fechaExpedicion, 'America/Mexico_City');
-  if (!fecha.isValid()) return fallback.toISOString();
-  const dia = fecha.day();
-  if (dia === 6) fecha = fecha.add(2, 'day');// sábado
-  else if (dia === 0) fecha = fecha.add(1, 'day');// domingo
-
-  return fecha.startOf('day').toISOString();
-}
-
 export default function ModalTitulo({
   open,
   setOpen,
@@ -67,7 +55,6 @@ export default function ModalTitulo({
   rowData,
   programaId,
   setAlumnoResponse,
-  fechaExpedicion,
   disabled,
   alumnosAgregados = [],
 }) {
@@ -81,12 +68,11 @@ export default function ModalTitulo({
     matricula: '',
     fechaInicio: '',
     fechaTerminacion: '',
-    fechaElaboracion: '',
     fechaExamenProfesional: '',
     modalidadTitulacionId: '',
     cumplioServicioSocial: '',
     fundamentoServicioSocialId: '',
-    fechaExpedicion: getFechaExpedicionAuto(fechaExpedicion),
+    fechaExpedicion: '',
   });
 
   useEffect(() => {
@@ -98,7 +84,7 @@ export default function ModalTitulo({
       }
       setAlumnoId(rowData.alumnoId);
     } else {
-      setForm(getEmptyForm(fechaExpedicion));
+      setForm(getEmptyForm());
       setAlumno(null);
       setAlumnoId(null);
     }
@@ -134,9 +120,6 @@ export default function ModalTitulo({
       fechaTerminacion: form.fechaTerminacion
         ? dayjs(form.fechaTerminacion).format('YYYY-MM-DDTHH:mm:ssZ')
         : null,
-      fechaElaboracion: form.fechaElaboracion
-        ? dayjs(form.fechaElaboracion).format('YYYY-MM-DDTHH:mm:ssZ')
-        : null,
       fechaExpedicion: form.fechaExpedicion
         ? dayjs(form.fechaExpedicion).format('YYYY-MM-DDTHH:mm:ssZ')
         : null,
@@ -162,7 +145,7 @@ export default function ModalTitulo({
                 : 'Registro creado exitosamente',
             type: 'success',
           });
-          setForm(getEmptyForm(fechaExpedicion));
+          setForm(getEmptyForm());
           setAlumno(null);
           setAlumnoId(null);
           setPosition('first');
@@ -291,7 +274,7 @@ export default function ModalTitulo({
                 label="Fecha de expedición de título"
                 id="fechaExpedicion"
                 name="fechaExpedicion"
-                value={getFechaExpedicionAuto(fechaExpedicion) || ''}
+                value={form.fechaExpedicion || ''}
                 disabled
               />
             </Grid>
@@ -371,7 +354,6 @@ ModalTitulo.propTypes = {
   type: PropTypes.string.isRequired,
   id: PropTypes.number,
   programaId: PropTypes.number,
-  fechaExpedicion: PropTypes.string.isRequired,
   alumnosAgregados: PropTypes.arrayOf(
     PropTypes.shape({
       alumnoId: PropTypes.number.isRequired,
@@ -391,11 +373,8 @@ ModalTitulo.propTypes = {
     alumnoId: PropTypes.number,
     id: PropTypes.number,
     name: PropTypes.string,
-    fechaTermino: PropTypes.string,
-    fechaElaboracion: PropTypes.string,
     fechaInicio: PropTypes.string,
     fechaTerminacion: PropTypes.string,
-    fechaExpedicion: PropTypes.string,
     fechaExamenProfesional: PropTypes.string,
   }),
 };
