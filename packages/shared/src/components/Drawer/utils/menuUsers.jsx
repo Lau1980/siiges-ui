@@ -34,7 +34,7 @@ const options = [
   {
     id: 2,
     nombre: 'Servicios escolares',
-    roles: ['admin', 'representante', 'ce_ies', 'ce_sicyt'],
+    roles: ['admin', 'representante', 'ce_ies', 'ce_sicyt', 'sicyt_editar'],
   },
   // { id: 3, nombre: "OPD'S", roles: ['admin', 'ce_sicyt'] },
   {
@@ -68,153 +68,156 @@ const solicitudesMenu = (rol) => ({
   key: 'solicitudes',
 });
 
-const panelMenuOptions = (rol, nombre) => [
-  ...(rol !== 'sicyt_editar' ? [{
-    userId: 1,
-    text: textPanelMenuOptions(rol).usuarios,
-    icon: <GroupIcon />,
-    route: '/usuarios',
-    key: 'users',
-  }] : []),
-  {
-    userId: 1,
-    text: textPanelMenuOptions(rol).instituciones,
-    icon: <BusinessIcon />,
-    route: routeInstitucionesRol(rol),
-    key: 'intitutions',
-  },
-  solicitudesMenu(rol),
-  {
-    userId: 2,
-    text: 'Programas',
-    icon: <AssignmentIcon />,
-    route: '/serviciosEscolares/programas',
-    key: 'programas',
-  },
-  {
-    userId: 2,
-    text: 'Alumnos',
-    icon: <PersonIcon />,
-    route: '/serviciosEscolares/alumnos',
-    key: 'alumnos',
-  },
-  {
-    userId: 2,
-    text: 'Validación',
-    icon: <AssignmentTurnedInIcon />,
-    route: '/serviciosEscolares/validacion',
-    key: 'validacion',
-  },
-  {
-    userId: 2,
-    text: 'Inscripción',
-    icon: <PersonAddIcon />,
-    route: '/serviciosEscolares/inscripcion',
-    key: 'inscripcion',
-  },
-  {
-    userId: 2,
-    text: 'Acreditación',
-    icon: <HistoryEduIcon />,
-    route: '/serviciosEscolares/acreditacion',
-    key: 'acreditacion',
-  },
-  {
-    userId: 2,
-    text: 'Titulación',
-    icon: <SchoolIcon />,
-    type: 'dropdown',
-    options: [
-      {
-        text: 'Egresados',
-        route: '/serviciosEscolares/egresados',
-      },
-      {
-        text: 'Catálogo de Títulos Electrónicos',
-        route: '/serviciosEscolares/titulacion',
-      },
-    ],
-    key: 'titulacion',
-  },
-  ...(canViewAsignacionFolios(rol, nombre)
-    ? [{
+const isSicytEditar = (rol) => rol === 'sicyt_editar';
+
+const panelMenuOptions = (rol, nombre) => {
+  const onlyProgramas = isSicytEditar(rol);
+
+  return [
+    ...(rol !== 'sicyt_editar'
+      ? [{
+        userId: 1,
+        text: textPanelMenuOptions(rol).usuarios,
+        icon: <GroupIcon />,
+        route: '/usuarios',
+        key: 'users',
+      }]
+      : []),
+
+    {
+      userId: 1,
+      text: textPanelMenuOptions(rol).instituciones,
+      icon: <BusinessIcon />,
+      route: routeInstitucionesRol(rol),
+      key: 'intitutions',
+    },
+
+    solicitudesMenu(rol),
+
+    {
       userId: 2,
-      text: 'Asignación de Folios',
-      icon: <LinkIcon />,
-      type: 'dropdown',
-      options: [
-        {
-          text: 'Solicitud de Folios',
-          route: '/serviciosEscolares/solicitudesFolios',
-        },
-        {
-          text: 'Folios Asignados',
-          route: '/serviciosEscolares/reporte/foliosAsignados',
-        },
-      ],
-      key: 'asignacionFolios',
-    }]
-    : []),
-  /* {
-    userId: 2,
-    text: 'Otros Trámites',
-    icon: <MoreHorizIcon />,
-    type: 'dropdown',
-    options: [
+      text: 'Programas',
+      icon: <AssignmentIcon />,
+      route: '/serviciosEscolares/programas',
+      key: 'programas',
+    },
+
+    ...(!onlyProgramas ? [
+
       {
-        text: 'Revalidación y Equivalencias',
-        route: '/serviciosEscolares/revalidacionEquivalencias',
+        userId: 2,
+        text: 'Alumnos',
+        icon: <PersonIcon />,
+        route: '/serviciosEscolares/alumnos',
+        key: 'alumnos',
       },
       {
-        text: 'Becas',
-        route: '/solicitudesBecas',
+        userId: 2,
+        text: 'Validación',
+        icon: <AssignmentTurnedInIcon />,
+        route: '/serviciosEscolares/validacion',
+        key: 'validacion',
       },
       {
-        text: 'Servicio Social',
-        route: '/serviciosEscolares/servicioSocial',
+        userId: 2,
+        text: 'Inscripción',
+        icon: <PersonAddIcon />,
+        route: '/serviciosEscolares/inscripcion',
+        key: 'inscripcion',
       },
-    ],
-    key: 'otrosTramites',
-  }, */
-  ...(rol !== 'ce_ies' ? [{
-    userId: 2,
-    text: 'Reportes',
-    icon: <AssignmentLateIcon />,
-    type: 'dropdown',
-    options: [
-      { text: 'Extraordinarios', route: '/serviciosEscolares/reporte/extraordinario' },
-    ],
-    key: 'reporte',
-  }] : []),
-  {
-    userId: 3,
-    text: 'Instituciones',
-    icon: <BusinessIcon />,
-    route: '/opds/instituciones',
-    key: 'intitutions',
-  },
-  {
-    userId: 3,
-    text: 'Órganos colegiados',
-    icon: <GroupsIcon />,
-    route: '/opds/organosColegiados',
-    key: 'organosColegiados',
-  },
-  {
-    userId: 3,
-    text: 'Fortalecimiento',
-    icon: <ArticleIcon />,
-    route: '/opds/fortalecimiento',
-    key: 'fortalecimeiento',
-  },
-  {
-    userId: 3,
-    text: 'Presupuesto',
-    icon: <RequestQuoteIcon />,
-    route: '/opds/presupuesto',
-    key: 'presupuesto',
-  },
-];
+      {
+        userId: 2,
+        text: 'Acreditación',
+        icon: <HistoryEduIcon />,
+        route: '/serviciosEscolares/acreditacion',
+        key: 'acreditacion',
+      },
+      {
+        userId: 2,
+        text: 'Titulación',
+        icon: <SchoolIcon />,
+        type: 'dropdown',
+        options: [
+          {
+            text: 'Egresados',
+            route: '/serviciosEscolares/egresados',
+          },
+          {
+            text: 'Catálogo de Títulos Electrónicos',
+            route: '/serviciosEscolares/titulacion',
+          },
+        ],
+        key: 'titulacion',
+      },
+
+      ...(canViewAsignacionFolios(rol, nombre)
+        ? [{
+          userId: 2,
+          text: 'Asignación de Folios',
+          icon: <LinkIcon />,
+          type: 'dropdown',
+          options: [
+            {
+              text: 'Solicitud de Folios',
+              route: '/serviciosEscolares/solicitudesFolios',
+            },
+            {
+              text: 'Folios Asignados',
+              route: '/serviciosEscolares/reporte/foliosAsignados',
+            },
+          ],
+          key: 'asignacionFolios',
+        }]
+        : []),
+
+      ...(rol !== 'ce_ies'
+        ? [{
+          userId: 2,
+          text: 'Reportes',
+          icon: <AssignmentLateIcon />,
+          type: 'dropdown',
+          options: [
+            {
+              text: 'Extraordinarios',
+              route: '/serviciosEscolares/reporte/extraordinario',
+            },
+          ],
+          key: 'reporte',
+        }]
+        : []),
+
+    ] : []),
+
+    {
+      userId: 3,
+      text: 'Instituciones',
+      icon: <BusinessIcon />,
+      route: '/opds/instituciones',
+      key: 'intitutions',
+    },
+    {
+      userId: 3,
+      text: 'Órganos colegiados',
+      icon: <GroupsIcon />,
+      route: '/opds/organosColegiados',
+      key: 'organosColegiados',
+    },
+    {
+      userId: 3,
+      text: 'Fortalecimiento',
+      icon: <ArticleIcon />,
+      route: '/opds/fortalecimiento',
+      key: 'fortalecimeiento',
+    },
+    {
+      userId: 3,
+      text: 'Presupuesto',
+      icon: <RequestQuoteIcon />,
+      route: '/opds/presupuesto',
+      key: 'presupuesto',
+    },
+  ].filter(Boolean);
+};
 
 const optionsMenuFilter = {
   jefe_inspector: [

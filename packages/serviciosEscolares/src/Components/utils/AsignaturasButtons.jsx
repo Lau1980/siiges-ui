@@ -34,7 +34,13 @@ export default function AsignaturasButtons({
     setDeleteDialogOpen(false);
   };
 
-  const canEditOrDelete = rol === 'admin';
+  const permissions = {
+    canEdit: ['admin', 'sicyt_editar'],
+    canDelete: ['admin'],
+  };
+
+  const canEdit = permissions.canEdit.includes(rol);
+  const canDelete = permissions.canDelete.includes(rol);
 
   return (
     <Stack direction="row" spacing={1}>
@@ -43,19 +49,20 @@ export default function AsignaturasButtons({
           <VisibilityOutlinedIcon />
         </IconButton>
       </Tooltip>
-      {canEditOrDelete && (
-        <>
-          <Tooltip title="Editar" placement="top">
-            <IconButton aria-label="editar" onClick={() => handleModalOpen(true)}>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Eliminar" placement="top">
-            <IconButton aria-label="eliminar" onClick={handleDeleteDialogOpen}>
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        </>
+      {canEdit && (
+      <Tooltip title="Editar" placement="top">
+        <IconButton aria-label="editar" onClick={() => handleModalOpen(true)}>
+          <EditIcon />
+        </IconButton>
+      </Tooltip>
+      )}
+
+      {canDelete && (
+      <Tooltip title="Eliminar" placement="top">
+        <IconButton aria-label="eliminar" onClick={handleDeleteDialogOpen}>
+          <DeleteIcon />
+        </IconButton>
+      </Tooltip>
       )}
 
       {modalOpen && (
