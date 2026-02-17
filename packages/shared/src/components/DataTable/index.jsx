@@ -112,7 +112,7 @@ function DataTable({
           pageSize={pageSize}
           rowsPerPageOptions={[5, 10, 25, 50, 100]}
           onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-          initialState={initialState || { sorting: { sortModel: [{ field: 'id', sort: 'desc' }] } }}
+          initialState={initialState || { sorting: { sortModel: [{ field: 'id', sort: 'asc' }] } }}
         />
       </div>
     </>
@@ -125,7 +125,7 @@ DataTable.defaultProps = {
   buttonDisabled: false,
   buttonText: '',
   buttonType: '',
-  initialState: { sorting: { sortModel: [{ field: 'id', sort: 'desc' }] } },
+  initialState: { sorting: { sortModel: [{ field: 'id', sort: 'asc' }] } },
   buttonClick: () => {},
 };
 
@@ -135,7 +135,7 @@ DataTable.propTypes = {
       sortModel: PropTypes.arrayOf(
         PropTypes.shape({
           field: PropTypes.string.isRequired,
-          sort: PropTypes.oneOf(['asc', 'desc']),
+          sort: PropTypes.oneOf(['desc', 'asc']),
         }),
       ),
     }),
