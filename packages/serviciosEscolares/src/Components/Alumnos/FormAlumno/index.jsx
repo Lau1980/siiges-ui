@@ -36,7 +36,7 @@ export default function FormAlumno({
   const [errorMail, setErrorMail] = useState('');
   const [errorCurp, setErrorCurp] = useState('');
   const ifRepresentantes = (session.rol === 'representante' || session.rol === 'ce_ies');
-  const optionalFields = ['apellidoMaterno', 'telefono', 'celular'];
+  const optionalFields = ['apellidoMaterno', 'telefono', 'celular', 'situacionId'];
 
   const getErrorMessage = (campoId) => {
     if (campoId === 'correoPrimario') return errorMail;
@@ -236,7 +236,6 @@ export default function FormAlumno({
           value={value}
           onChange={handleOnChange}
           errorMessage={errorMessage}
-          required
         />
       );
     }
